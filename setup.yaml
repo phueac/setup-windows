@@ -1,0 +1,53 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+properties:
+  resources:
+    # The Windows Virtual Machine Platform optional feature
+    # needs to be enabled in order for WSL to work.
+    # This should enable it, but there is a known issue:
+    # https://github.com/microsoft/winget-cli/issues/4264
+    # We will need to enable it manually through the UI by
+    # searching for "Turn Windows features on and off" (NOT
+    # "Optional Features" lol MS).
+    # - resource: PSDscResources/WindowsOptionalFeature
+    #   settings:
+    #     name: VirtualMachinePlatform
+    #     ensure: Present
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: chrome
+      directives:
+        description: Install Google Chrome
+        allowPrerelease: true
+      settings:
+        id: Google.Chrome
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        allowPrerelease: true
+      settings:
+        id: Obsidian.Obsidian
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: steam
+      directives:
+        allowPrerelease: true
+      settings:
+        id: Valve.Steam
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: wslStore
+      directives:
+        description:  WSL
+        allowPrerelease: true
+      settings:
+        id: "9P9TQF7MRM4R"
+        source: msstore  
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      dependsOn:
+        - wslStore
+      directives:
+        description:  Ubuntu 22.04 LTS
+        allowPrerelease: true
+      settings:
+        id: Canonical.Ubuntu.2204
+        source: winget    
+  configurationVersion: 0.2.0
